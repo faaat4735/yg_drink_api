@@ -28,6 +28,14 @@ Macaw::any('/(:all)/(:all)', function($controller, $action) {
     if (!method_exists($controllerClass, $actionName)) {
         $return = '未找到';
         echo $return;
+        if (DEBUG_MODE) {
+            //add api log
+            $logFile = LOG_DIR;
+            if (!is_dir($logFile)) {
+                mkdir($logFile, 0755, true);
+            }
+            file_put_contents($logFile . 'access.log', date('Y-m-d H:i:s') . '|' . $return . PHP_EOL, FILE_APPEND);
+        }
         exit;
     } else {
         $result = $controllerClass->init();
@@ -63,6 +71,14 @@ Macaw::any('/(:all)/(:all)', function($controller, $action) {
 Macaw::get('(:all)', function($fu) {
     //todo 404
     echo '未匹配到路由<br>'.$fu;
+    if (DEBUG_MODE) {
+        //add api log
+        $logFile = LOG_DIR;
+        if (!is_dir($logFile)) {
+            mkdir($logFile, 0755, true);
+        }
+        file_put_contents($logFile . 'access.log', date('Y-m-d H:i:s') . '|未匹配到路由'  . PHP_EOL, FILE_APPEND);
+    }
 });
 
 Macaw::dispatch();
