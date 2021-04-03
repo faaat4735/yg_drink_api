@@ -1,0 +1,19 @@
+{
+  "require": {
+    "noahbuscher/macaw": "dev-master"
+  },
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://mirrors.aliyun.com/composer/"
+    }
+  },
+  "autoload": {
+    "classmap": [
+      "app/controllers",
+      "app/core",
+      "app/admin",
+      "app/models"
+    ]
+  }
+}
