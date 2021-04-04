@@ -7,7 +7,7 @@ use Core\Controller;
 class ActionController extends Controller
 {
     public function drinkAction () {
-        $sql = 'INSERT INTO t_user_drink SET user_id = ?, drink_type = ?, create_date = ?, quantity = ?';
+        $sql = 'INSERT INTO t_user_drink SET user_id = ?, drink_type = ?, create_date = ?, drink_quantity = ?';
         $this->db->exec($sql, $this->userId, 1, date('Y-m-d'), 200);
         return array();
     }
