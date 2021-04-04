@@ -18,7 +18,7 @@ class ActionController extends Controller
                 $sql .= ', is_reach = 1';
             }
             $sql .= ' WHERE total_id = ?';
-            $this->exec($sql, $totalInfo['drink_total'] + $drinkOnce, $totalInfo['total_id']);
+            $this->db->exec($sql, $totalInfo['drink_total'] + $drinkOnce, $totalInfo['total_id']);
         } else {
             $sql = 'SELECT drink_target FROM t_user WHERE user_id = ?';
             $drinkTarget = $this->db->getOne($sql, $this->userId);
