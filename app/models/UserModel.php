@@ -35,8 +35,8 @@ class UserModel extends Model
 
         $accessToken = md5($deviceId . time());
         // 插入用户
-        $sql = 'INSERT INTO t_user SET user_source = ?, device_id = ?, access_token = ?, nickname = ?, OAID = ?, brand = ?, model = ?, SDKVersion = ?, AndroidId = ?, IMEI = ?, MAC = ?, invited_code = ?';
-        $this->db->exec($sql, $_SERVER['HTTP_SOURCE'] ?? '', $deviceId, $accessToken, $nickName, $deviceInfo['OAID'] ?? '', $deviceInfo['brand'] ?? '', $deviceInfo['model'] ?? '', $deviceInfo['SDKVersion'] ?? '', $deviceInfo['AndroidID'] ?? '', $deviceInfo['IMEI'] ?? '', $deviceInfo['MAC'] ?? '', $invitedCode);
+        $sql = 'INSERT INTO t_user SET user_source = ?, device_id = ?, access_token = ?, nickname = ?, OAID = ?, brand = ?, model = ?, SDKVersion = ?, AndroidId = ?, IMEI = ?, MAC = ?, invited_code = ?, drink_target = ?';
+        $this->db->exec($sql, $_SERVER['HTTP_SOURCE'] ?? '', $deviceId, $accessToken, $nickName, $deviceInfo['OAID'] ?? '', $deviceInfo['brand'] ?? '', $deviceInfo['model'] ?? '', $deviceInfo['SDKVersion'] ?? '', $deviceInfo['AndroidID'] ?? '', $deviceInfo['IMEI'] ?? '', $deviceInfo['MAC'] ?? '', $invitedCode, 2400);
         // 返回信息
         $userId = $this->db->lastInsertId();
         $this->updateLoginTime($userId);
