@@ -27,4 +27,29 @@ class ActionController extends Controller
         }
         return array();
     }
+
+
+    /**
+     * 用户反馈
+     * @return array|int
+     */
+    public function feedbackAction () {
+        if (!isset($this->inputData['content']) && $this->inputData['content']) {
+            return 202;
+        }
+        //判断多次提交需要超过多久
+        $sql = 'SELECT create_time FROM t_user_feedback WHERE user_id = ? ORDER BY feedback_id DESC';
+        $lastUpload = $this->db->getOne($sql, $this->userId);
+        if ($lastUpload && (time() - strtotime($lastUpload) < 600)) {
+            return 314;
+        }
+
+        $sql = 'INSERT INTO t_user_feedback SET user_id = :user_id, content = :content, phone = :phone';
+        $this->db->exec($sql, array(
+            'user_id' => $this->userId,
+            'content' => $this->inputData['content'],
+            'phone' => $this->inputData['phone'] ?? 0
+        ));
+        return array();
+    }
 }
