@@ -34,7 +34,7 @@ class ActionController extends Controller
      * @return array|int
      */
     public function feedbackAction () {
-        if (!isset($this->inputData['content']) && $this->inputData['content']) {
+        if (!isset($this->inputData['content']) || !$this->inputData['content']) {
             return 202;
         }
         //判断多次提交需要超过多久
