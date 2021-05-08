@@ -62,7 +62,7 @@ Macaw::any('/(:all)/(:all)', function($controller, $action) {
         if (!is_dir($logFile)) {
             mkdir($logFile, 0755, true);
         }
-        file_put_contents($logFile . 'access.log', date('Y-m-d H:i:s') . '|' . ($_SERVER['HTTP_VERSION_CODE'] ?? ' ') . '|' . ($_SERVER['HTTP_SOURCE'] ?? ' ') . '|' . ($_SERVER['HTTP_TIME'] ?? ' ') . '|' . ($_SERVER['HTTP_SECRET'] ?? ' ') . '|' . file_get_contents("php://input") . '|' . json_encode($return) . PHP_EOL, FILE_APPEND);
+        file_put_contents($logFile . 'access.log', date('Y-m-d H:i:s') . '|' . json_encode($_SERVER) . '|' . $controller. '/' .$action . '|' . file_get_contents("php://input") . '|' . json_encode($return) . PHP_EOL, FILE_APPEND);
     }
     echo json_encode($return);
     exit;

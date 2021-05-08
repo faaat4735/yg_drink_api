@@ -41,7 +41,7 @@ class ActionController extends Controller
         $sql = 'SELECT create_time FROM t_user_feedback WHERE user_id = ? ORDER BY feedback_id DESC';
         $lastUpload = $this->db->getOne($sql, $this->userId);
         if ($lastUpload && (time() - strtotime($lastUpload) < 600)) {
-            return 314;
+            return 401;
         }
 
         $sql = 'INSERT INTO t_user_feedback SET user_id = :user_id, content = :content, phone = :phone';
