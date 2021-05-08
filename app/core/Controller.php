@@ -12,7 +12,8 @@ class Controller
 
     public function __construct()
     {
-        $this->inputData = json_decode(file_get_contents("php://input"), TRUE);
+//        $this->inputData = json_decode(file_get_contents("php://input"), TRUE);
+        $this->inputData = $_POST;
         if (isset($_POST['pageSize'])) {
             $this->limitCount = $_POST['pageSize'];
             if (isset($_POST['pageNo'])) {
