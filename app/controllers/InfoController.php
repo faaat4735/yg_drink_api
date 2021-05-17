@@ -25,7 +25,7 @@ class InfoController extends Controller
         $sql = 'SELECT COUNT(total_id) FROM t_user_drink_total WHERE user_id = ? AND is_reach = ?';
         $reachCount = $this->db->getOne($sql, $this->userId, 1);
         $sql = 'SELECT create_date, drink_total FROM t_user_drink_total WHERE user_id = ? AND create_date <= ? AND create_date >= ?';
-        $listInfo = $this->db->getColumn($sql, $this->userId, date('Y-m-d', strtotime('-1 day')), date('Y-m-d', strtotime('-7 day')));
+        $listInfo = $this->db->getPairs($sql, $this->userId, date('Y-m-d', strtotime('-1 day')), date('Y-m-d', strtotime('-7 day')));
         var_dump($listInfo);
         $dateList = array(date('Y-m-d', strtotime('-7 day')), date('Y-m-d', strtotime('-6 day')), date('Y-m-d', strtotime('-5 day')), date('Y-m-d', strtotime('-4 day')), date('Y-m-d', strtotime('-3 day')), date('Y-m-d', strtotime('-2 day')), date('Y-m-d', strtotime('-1 day')));
         var_dump($dateList);
