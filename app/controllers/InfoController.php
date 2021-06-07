@@ -37,4 +37,13 @@ class InfoController extends Controller
         }
         return array('total' => $drinkInfo['total'], 'perDay' => $drinkInfo['total_days'] ? floor($drinkInfo['total'] / $drinkInfo['total_days']) : 0, 'reachCount' => $reachCount, 'drinkCount' => $drinkInfo['drinkCount'], 'list' => $list);
     }
+
+
+    /**
+     * 广告
+     * @return array
+     */
+    public function statusAction () {
+        return array('adStatus' => "1");
+    }
 }
