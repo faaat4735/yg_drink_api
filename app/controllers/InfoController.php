@@ -44,6 +44,6 @@ class InfoController extends Controller
      * @return array
      */
     public function statusAction () {
-        return array('adStatus' => "1");
+        return array('adStatus' => "0");
     }
 }
