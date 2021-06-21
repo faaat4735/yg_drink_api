@@ -20,6 +20,10 @@ class InfoController extends Controller
     }
 
     public function historyAction () {
+        $sql = 'SELECT UNIX_TIMESTAMP(create_time) FROM t_user WHERE user_id = ?';
+        $firstDayTimeStamp = $this->db->getOne($sql, $this->userId);
+        $firstDay = date('Y-m-d', $firstDayTimeStamp);
+        $take = floor((time()-$firstDayTimeStamp)/86400);
         $sql = 'SELECT IFNULL(SUM(drink_quantity), 0) total, COUNT(DISTINCT create_date) total_days, COUNT(drink_id) drinkCount FROM t_user_drink WHERE user_id = ?';
         $drinkInfo = $this->db->getRow($sql, $this->userId);
         $sql = 'SELECT COUNT(total_id) FROM t_user_drink_total WHERE user_id = ? AND is_reach = ?';
@@ -35,17 +39,6 @@ class InfoController extends Controller
                 $list[] = array('date' => substr($date,5 ), 'quantity' => 0);
             }
         }
-        return array('total' => $drinkInfo['total'], 'perDay' => $drinkInfo['total_days'] ? floor($drinkInfo['total'] / $drinkInfo['total_days']) : 0, 'reachCount' => $reachCount, 'drinkCount' => $drinkInfo['drinkCount'], 'list' => $list);
-    }
-
-
-    /**
-     * 广告
-     * @return array
-     */
-    public function statusAction () {
-        $sql = 'SELECT ad_status FROM t_version_ad WHERE version_id = ? AND app_name = ?';
-        $adStatus = $this->db->getOne($sql, $_SERVER['HTTP_VERSION_CODE'] ?? 0, $_SERVER['HTTP_SOURCE'] ?? '') ?: 0;
-        return array('adStatus' => $adStatus);
+        return array('total' => $drinkInfo['total'], 'perDay' => $drinkInfo['total_days'] ? floor($drinkInfo['total'] / $drinkInfo['total_days']) : 0, 'reachCount' => $reachCount, 'drinkCount' => $drinkInfo['drinkCount'], 'first' => $firstDay, 'take' => $take, 'list' => $list);
     }
 }
