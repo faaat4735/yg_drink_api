@@ -107,10 +107,10 @@ class Task extends Controller
                 $return['name'] = '绑定微信号';
                 $return['status'] = 0;
                 break;
-            case 'sport_ywzz':
+            case 'sport_ywqz':
                 $return['type'] = 'popup';
-                $return['url'] = 'sport_ywzz';
-                $return['goldInfo'] = array('count' => 1, 'num' => 20,'type' => "sport_ywzz");
+                $return['url'] = 'sport_ywqz';
+                $return['goldInfo'] = array('count' => 1, 'num' => 20,'type' => "sport_ywqz");
                 $return['name'] = '仰卧起坐(0/20)';
                 $return['receiveTime'] = time() * 1000;
                 $return['status'] = 0;
