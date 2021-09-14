@@ -139,10 +139,10 @@ class Task extends Controller
                 $return['receiveTime'] = time() * 1000;
                 $return['status'] = 0;
                 break;
-            case 'sport_hwyy':
+            case 'sport_hwyd':
                 $return['type'] = 'popup';
-                $return['url'] = 'sport_hwyy';
-                $return['goldInfo'] = array('count' => 1, 'num' => 20,'type' => "sport_hwyy");
+                $return['url'] = 'sport_hwyd';
+                $return['goldInfo'] = array('count' => 1, 'num' => 20,'type' => "sport_hwyd");
                 $return['name'] = '户外运动(0/2)';
                 $return['receiveTime'] = time() * 1000;
                 $return['status'] = 0;
