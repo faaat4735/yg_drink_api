@@ -140,7 +140,7 @@ class Task extends Controller
                 $return['goldInfo'] = array('count' => 1, 'num' => 200,'type' => "wechat");
                 $return['name'] = '绑定微信号';
                 $return['status'] = 0;
-                $sql = 'SELECT COUNT(*) FROM t_gold WHERE user_id = ? AND gold_source = ? AND create_date = ?';
+                $sql = 'SELECT COUNT(*) FROM t_gold WHERE user_id = ? AND gold_source = ? AND change_date = ?';
                 if ($this->db->getOne($sql, $this->userId, "wechat", date('Y-m-d'))){
                     $return['status'] = 2;
                 } else {
