@@ -124,7 +124,7 @@ class Task extends Controller
                 $return['type'] = 'popup';
                 $return['url'] = 'video';
                 $return['name'] = '看创意视频';
-                $sql = 'SELECT count(gold_id) count, MAX(create_time) maxTime FROM t_gold WHERE user_id = ? AND create_date = ? AND gold_source = ?';
+                $sql = 'SELECT count(gold_id) count, MAX(create_time) maxTime FROM t_gold WHERE user_id = ? AND change_date = ? AND gold_source = ?';
                 $receiveInfo = $this->db->getRow($sql, $this->userId, date('Y-m-d'), 'video');
                 if ($receiveInfo['count'] >= 3) {
                     $return['status'] = 2;
