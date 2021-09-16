@@ -79,7 +79,7 @@ class Task extends Controller
                 $sql = 'SELECT COUNT(*) FROM t_user_drink WHERE user_id = ? AND create_date = ?';
                 if ($this->db->getOne($sql, $this->userId, date('Y-m-d')) >= 1) {
                     $return['status'] = 1;
-                    $sql = 'SELECT COUNT(*) FROM t_gold WHERE user_id = ? AND gold_source = ? AND create_date = ?';
+                    $sql = 'SELECT COUNT(*) FROM t_gold WHERE user_id = ? AND gold_source = ? AND change_date = ?';
                     if ($this->db->getOne($sql, $this->userId, "drink", date('Y-m-d'))){
                         $return['status'] = 2;
                     }
@@ -95,7 +95,7 @@ class Task extends Controller
                 $sql = 'SELECT COUNT(*) FROM t_user_drink WHERE user_id = ? AND create_date = ?';
                 if ($this->db->getOne($sql, $this->userId, date('Y-m-d')) >= 4) {
                     $return['status'] = 1;
-                    $sql = 'SELECT COUNT(*) FROM t_gold WHERE user_id = ? AND gold_source = ? AND create_date = ?';
+                    $sql = 'SELECT COUNT(*) FROM t_gold WHERE user_id = ? AND gold_source = ? AND change_date = ?';
                     if ($this->db->getOne($sql, $this->userId, "drink_total", date('Y-m-d'))){
                         $return['status'] = 2;
                     }
@@ -112,7 +112,7 @@ class Task extends Controller
                 $sql = 'SELECT IFNULL(SUM(drink_quantity), 0) FROM t_user_drink WHERE user_id = ? AND create_date = ?';
                 if ($this->db->getOne($sql, $this->userId, date('Y-m-d')) >= 2400) {
                     $return['status'] = 1;
-                    $sql = 'SELECT COUNT(*) FROM t_gold WHERE user_id = ? AND gold_source = ? AND create_date = ?';
+                    $sql = 'SELECT COUNT(*) FROM t_gold WHERE user_id = ? AND gold_source = ? AND change_date = ?';
                     if ($this->db->getOne($sql, $this->userId, "drink_target", date('Y-m-d'))){
                         $return['status'] = 2;
                     }
@@ -154,7 +154,7 @@ class Task extends Controller
                 $return['type'] = 'popup';
                 $return['url'] = 'sport_ywqz';
                 $return['name'] = '仰卧起坐';
-                $sql = 'SELECT count(gold_id) count, MAX(create_time) maxTime FROM t_gold WHERE user_id = ? AND create_date = ? AND gold_source = ?';
+                $sql = 'SELECT count(gold_id) count, MAX(create_time) maxTime FROM t_gold WHERE user_id = ? AND change_date = ? AND gold_source = ?';
                 $receiveInfo = $this->db->getRow($sql, $this->userId, date('Y-m-d'), 'sport_ywqz');
                 if ($receiveInfo['count'] >= 20) {
                     $return['status'] = 2;
@@ -168,7 +168,7 @@ class Task extends Controller
                 $return['type'] = 'popup';
                 $return['url'] = 'sport_zyz';
                 $return['name'] = '走一走';
-                $sql = 'SELECT count(gold_id) count, MAX(create_time) maxTime FROM t_gold WHERE user_id = ? AND create_date = ? AND gold_source = ?';
+                $sql = 'SELECT count(gold_id) count, MAX(create_time) maxTime FROM t_gold WHERE user_id = ? AND change_date = ? AND gold_source = ?';
                 $receiveInfo = $this->db->getRow($sql, $this->userId, date('Y-m-d'), 'sport_zyz');
                 if ($receiveInfo['count'] >= 10) {
                     $return['status'] = 2;
@@ -182,7 +182,7 @@ class Task extends Controller
                 $return['type'] = 'popup';
                 $return['url'] = 'sport_pyp';
                 $return['name'] = '跑一跑';
-                $sql = 'SELECT count(gold_id) count, MAX(create_time) maxTime FROM t_gold WHERE user_id = ? AND create_date = ? AND gold_source = ?';
+                $sql = 'SELECT count(gold_id) count, MAX(create_time) maxTime FROM t_gold WHERE user_id = ? AND change_date = ? AND gold_source = ?';
                 $receiveInfo = $this->db->getRow($sql, $this->userId, date('Y-m-d'), 'sport_pyp');
                 if ($receiveInfo['count'] >= 8) {
                     $return['status'] = 2;
@@ -196,7 +196,7 @@ class Task extends Controller
                 $return['type'] = 'popup';
                 $return['url'] = 'sport_yy';
                 $return['name'] = '游泳';
-                $sql = 'SELECT count(gold_id) count, MAX(create_time) maxTime FROM t_gold WHERE user_id = ? AND create_date = ? AND gold_source = ?';
+                $sql = 'SELECT count(gold_id) count, MAX(create_time) maxTime FROM t_gold WHERE user_id = ? AND change_date = ? AND gold_source = ?';
                 $receiveInfo = $this->db->getRow($sql, $this->userId, date('Y-m-d'), 'sport_yy');
                 if ($receiveInfo['count'] >= 4) {
                     $return['status'] = 2;
@@ -209,7 +209,7 @@ class Task extends Controller
             case 'sport_hwyd':
                 $return['type'] = 'popup';
                 $return['url'] = 'sport_hwyd';
-                $sql = 'SELECT count(gold_id) count, MAX(create_time) maxTime FROM t_gold WHERE user_id = ? AND create_date = ? AND gold_source = ?';
+                $sql = 'SELECT count(gold_id) count, MAX(create_time) maxTime FROM t_gold WHERE user_id = ? AND change_date = ? AND gold_source = ?';
                 $receiveInfo = $this->db->getRow($sql, $this->userId, date('Y-m-d'), 'sport_hwyd');
                 if ($receiveInfo['count'] >= 2) {
                     $return['status'] = 2;
