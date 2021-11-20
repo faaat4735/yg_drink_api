@@ -61,76 +61,47 @@ class Task extends Controller
     protected function _verify($data) {
         // 验证最大次数 可领取时间
         // 移动sql 到model中
-        $sql = 'SELECT award_min, award_max FROM t_award_config WHERE config_type = ? AND counter <= ? ORDER BY counter DESC LIMIT 1';
-        $awardRange = $this->db->getRow($sql, $this->type, $data['count']);
-        if ($awardRange['award_min'] <= $data['num'] && $awardRange['award_max'] >= $data['num']) {
+        $sql = 'SELECT activity_award FROM t_activity WHERE activity_type = ?';
+        $award = $this->db->getOne($sql, $this->type);
+        if ($award == $data['num']) {
             return TRUE;
         }
         return 301;
     }
 
     protected function _getInfo() {
+        $sql = 'SELECT * FROM t_activity WHERE activity_type = ?';
+        $taskInfo = $this->db->getRow($sql, $this->type);
         switch ($this->type) {
             case 'drink':
-                $return['type'] = 'interior';
-                $return['url'] = 'home';
-                $return['goldInfo'] = array('count' => 1, 'num' => 20,'type' => "drink");
-                $return['name'] = '完成首次喝水打卡';
-                $sql = 'SELECT COUNT(*) FROM t_user_drink WHERE user_id = ? AND create_date = ?';
-                if ($this->db->getOne($sql, $this->userId, date('Y-m-d')) >= 1) {
-                    $return['status'] = 1;
-                    $sql = 'SELECT COUNT(*) FROM t_gold WHERE user_id = ? AND gold_source = ? AND change_date = ?';
-                    if ($this->db->getOne($sql, $this->userId, "drink", date('Y-m-d'))){
-                        $return['status'] = 2;
-                    }
-                } else {
-                    $return['status'] = 0;
-                }
-                break;
             case 'drink_total':
-                $return['type'] = 'interior';
-                $return['url'] = 'home';
-                $return['goldInfo'] = array('count' => 1, 'num' => 100,'type' => "drink_total");
-                $return['name'] = '累计完成4次喝水';
-                $sql = 'SELECT COUNT(*) FROM t_user_drink WHERE user_id = ? AND create_date = ?';
-                if ($this->db->getOne($sql, $this->userId, date('Y-m-d')) >= 4) {
-                    $return['status'] = 1;
-                    $sql = 'SELECT COUNT(*) FROM t_gold WHERE user_id = ? AND gold_source = ? AND change_date = ?';
-                    if ($this->db->getOne($sql, $this->userId, "drink_total", date('Y-m-d'))){
-                        $return['status'] = 2;
-                    }
-                } else {
-                    $return['status'] = 0;
-                }
-                break;
             case 'drink_target':
                 $return['type'] = 'interior';
                 $return['url'] = 'home';
-                $return['goldInfo'] = array('count' => 1, 'num' => 500,'type' => "drink_target");
-                $return['name'] = '完成今日喝水目标';
-                $return['status'] = 0;
-                $sql = 'SELECT IFNULL(SUM(drink_quantity), 0) FROM t_user_drink WHERE user_id = ? AND create_date = ?';
-                if ($this->db->getOne($sql, $this->userId, date('Y-m-d')) >= 2400) {
+                $return['goldInfo'] = array('count' => 1, 'num' => $taskInfo['activity_award'],'type' => $this->type);
+                $return['name'] = $taskInfo['activity_name'];
+                $isTrue = FALSE;
+                switch ($this->type) {
+                    case 'drink':
+                        $sql = 'SELECT COUNT(*) FROM t_user_drink WHERE user_id = ? AND create_date = ?';
+                        $isTrue = $this->db->getOne($sql, $this->userId, date('Y-m-d')) >= 1;
+                        break;
+                    case 'drink_total':
+                        $sql = 'SELECT COUNT(*) FROM t_user_drink WHERE user_id = ? AND create_date = ?';
+                        $isTrue = $this->db->getOne($sql, $this->userId, date('Y-m-d')) >= 4;
+                        break;
+                    case 'drink_target':
+                        $sql = 'SELECT IFNULL(SUM(drink_quantity), 0) FROM t_user_drink WHERE user_id = ? AND create_date = ?';
+                        $isTrue = $this->db->getOne($sql, $this->userId, date('Y-m-d')) >= 2400;
+                        break;
+                }
+                if ($isTrue) {
                     $return['status'] = 1;
                     $sql = 'SELECT COUNT(*) FROM t_gold WHERE user_id = ? AND gold_source = ? AND change_date = ?';
-                    if ($this->db->getOne($sql, $this->userId, "drink_target", date('Y-m-d'))){
+                    if ($this->db->getOne($sql, $this->userId, $this->type, date('Y-m-d'))){
                         $return['status'] = 2;
                     }
                 } else {
-                    $return['status'] = 0;
-                }
-                break;
-            case 'video':
-                $return['type'] = 'popup';
-                $return['url'] = 'video';
-                $return['name'] = '看创意视频';
-                $sql = 'SELECT count(gold_id) count, MAX(create_time) maxTime FROM t_gold WHERE user_id = ? AND change_date = ? AND gold_source = ?';
-                $receiveInfo = $this->db->getRow($sql, $this->userId, date('Y-m-d'), 'video');
-                if ($receiveInfo['count'] >= 3) {
-                    $return['status'] = 2;
-                } else {
-                    $return['goldInfo'] = array('count' => $receiveInfo['count'] + 1, 'num' => 50,'type' => "video");
-                    $return['receiveTime'] = (($receiveInfo['maxTime'] ? strtotime($receiveInfo['maxTime']) + 4 * 60 : time())) * 1000;
                     $return['status'] = 0;
                 }
                 break;
@@ -150,75 +121,19 @@ class Task extends Controller
                     }
                 }
                 break;
-            case 'sport_ywqz':
+            default:
                 $return['type'] = 'popup';
-                $return['url'] = 'sport_ywqz';
-                $return['name'] = '仰卧起坐';
+                $return['url'] = $this->type;
+                $return['name'] = $taskInfo['activity_name'];
                 $sql = 'SELECT count(gold_id) count, MAX(create_time) maxTime FROM t_gold WHERE user_id = ? AND change_date = ? AND gold_source = ?';
-                $receiveInfo = $this->db->getRow($sql, $this->userId, date('Y-m-d'), 'sport_ywqz');
-                if ($receiveInfo['count'] >= 20) {
+                $receiveInfo = $this->db->getRow($sql, $this->userId, date('Y-m-d'), $this->type);
+                if ($receiveInfo['count'] >= $taskInfo['activity_max']) {
                     $return['status'] = 2;
                 } else {
-                    $return['goldInfo'] = array('count' => $receiveInfo['count'] + 1, 'num' => 10,'type' => "sport_ywqz");
-                    $return['receiveTime'] = (($receiveInfo['maxTime'] ? strtotime($receiveInfo['maxTime']) + 1 * 60 : time())) * 1000;
+                    $return['goldInfo'] = array('count' => $receiveInfo['count'] + 1, 'num' => $taskInfo['activity_award'],'type' => $this->type);
+                    $return['receiveTime'] = (($receiveInfo['maxTime'] ? strtotime($receiveInfo['maxTime']) + $taskInfo['activity_duration'] * 60 : time())) * 1000;
                     $return['status'] = 0;
                 }
-                break;
-            case 'sport_zyz':
-                $return['type'] = 'popup';
-                $return['url'] = 'sport_zyz';
-                $return['name'] = '走一走';
-                $sql = 'SELECT count(gold_id) count, MAX(create_time) maxTime FROM t_gold WHERE user_id = ? AND change_date = ? AND gold_source = ?';
-                $receiveInfo = $this->db->getRow($sql, $this->userId, date('Y-m-d'), 'sport_zyz');
-                if ($receiveInfo['count'] >= 10) {
-                    $return['status'] = 2;
-                } else {
-                    $return['goldInfo'] = array('count' => $receiveInfo['count'] + 1, 'num' => 20,'type' => "sport_zyz");
-                    $return['receiveTime'] = (($receiveInfo['maxTime'] ? strtotime($receiveInfo['maxTime']) + 2 * 60 : time())) * 1000;
-                    $return['status'] = 0;
-                }
-                break;
-            case 'sport_pyp':
-                $return['type'] = 'popup';
-                $return['url'] = 'sport_pyp';
-                $return['name'] = '跑一跑';
-                $sql = 'SELECT count(gold_id) count, MAX(create_time) maxTime FROM t_gold WHERE user_id = ? AND change_date = ? AND gold_source = ?';
-                $receiveInfo = $this->db->getRow($sql, $this->userId, date('Y-m-d'), 'sport_pyp');
-                if ($receiveInfo['count'] >= 8) {
-                    $return['status'] = 2;
-                } else {
-                    $return['goldInfo'] = array('count' => $receiveInfo['count'] + 1, 'num' => 30,'type' => "sport_pyp");
-                    $return['receiveTime'] = (($receiveInfo['maxTime'] ? strtotime($receiveInfo['maxTime']) + 3 * 60 : time())) * 1000;
-                    $return['status'] = 0;
-                }
-                break;
-            case 'sport_yy':
-                $return['type'] = 'popup';
-                $return['url'] = 'sport_yy';
-                $return['name'] = '游泳';
-                $sql = 'SELECT count(gold_id) count, MAX(create_time) maxTime FROM t_gold WHERE user_id = ? AND change_date = ? AND gold_source = ?';
-                $receiveInfo = $this->db->getRow($sql, $this->userId, date('Y-m-d'), 'sport_yy');
-                if ($receiveInfo['count'] >= 4) {
-                    $return['status'] = 2;
-                } else {
-                    $return['goldInfo'] = array('count' => $receiveInfo['count'] + 1, 'num' => 40,'type' => "sport_yy");
-                    $return['receiveTime'] = (($receiveInfo['maxTime'] ? strtotime($receiveInfo['maxTime']) + 4 * 60 : time())) * 1000;
-                    $return['status'] = 0;
-                }
-                break;
-            case 'sport_hwyd':
-                $return['type'] = 'popup';
-                $return['url'] = 'sport_hwyd';
-                $sql = 'SELECT count(gold_id) count, MAX(create_time) maxTime FROM t_gold WHERE user_id = ? AND change_date = ? AND gold_source = ?';
-                $receiveInfo = $this->db->getRow($sql, $this->userId, date('Y-m-d'), 'sport_hwyd');
-                if ($receiveInfo['count'] >= 2) {
-                    $return['status'] = 2;
-                } else {
-                    $return['goldInfo'] = array('count' => $receiveInfo['count'] + 1, 'num' => 50,'type' => "sport_hwyd");
-                    $return['receiveTime'] = (($receiveInfo['maxTime'] ? strtotime($receiveInfo['maxTime']) + 5 * 60 : time())) * 1000;
-                    $return['status'] = 0;
-                }
-                break;
         }
         $return['serverTime'] = time() * 1000;
         return $return;
@@ -231,4 +146,5 @@ class Task extends Controller
         }
         return $this->_getInfo();
     }
+
 }

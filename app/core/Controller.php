@@ -9,6 +9,7 @@ class Controller
     protected $page;
     protected $limitStart = 0;
     protected $limitCount = 10;
+    protected $withdrawList = array(0.5, 50, 80, 100, 150);
 
     public function __construct()
     {

@@ -46,4 +46,25 @@ class InfoController extends Controller
         $taskClass = new \Core\Task($this->userId);
         return array('sign' => array('total' => 8, 'tomorrow' => 80, "today" => 1, "isReceive" => 1, 'list' =>  array(array("count" => 1, "num" => 40, "type" => "walk"), array("count" => 2, "num" => 20, "type" => "walk"), array("count" => 3, "num" => 30, "type" => "walk"), array("count" => 4, "num" => 30, "type" => "walk"), array("count" => 5, "num" => 30, "type" => "walk"), array("count" => 6, "num" => 30, "type" => "walk"), array("count" => 7, "num" => 30, "type" => "walk")), 'todayReceive' => 1), 'task' => array($taskClass->getInfo('video'), $taskClass->getInfo('drink'), $taskClass->getInfo('drink_total'), $taskClass->getInfo('drink_target'), $taskClass->getInfo('wechat'), $taskClass->getInfo('sport_ywqz'), $taskClass->getInfo('sport_zyz'), $taskClass->getInfo('sport_pyp'), $taskClass->getInfo('sport_yy'), $taskClass->getInfo('sport_hwyd')));
     }
+
+    /**
+     * 提现页面信息
+     * @return array
+     */
+    public function withdrawAction () {
+        $sql = 'SELECT wechat_unionid, alipay_account FROM t_user WHERE user_id = ?';
+        $bindInfo = $this->db->getRow($sql, $this->userId);
+        return array('isBindWechat' => ($bindInfo && $bindInfo['wechat_unionid']) ? 1 : 0);
+//        $isLock = 0;
+//        $withdrawList = array(array('amount' => 0.5, 'gold' => 5000), array('amount' => 50, 'gold' => 500000), array('amount' => 100, 'gold' => 1000000), array('amount' => 150, 'gold' => 1500000));
+//        $sql = 'SELECT COUNT(*) FROM t_withdraw WHERE user_id = ? AND withdraw_amount = ? AND (withdraw_status = "pending" OR withdraw_status = "success")';
+//        if ($this->db->getOne($sql, $this->userId, 0.5)) {
+//            $sql = 'SELECT COUNT(*) FROM t_liveness WHERE user_id = ? AND is_receive = 1 AND liveness_date = ?';
+//            $livenessCount = $this->db->getOne($sql, $this->userId, date('Y-m-d'));
+//            if ($livenessCount < 6) {
+//                $isLock = 1;
+//            }
+//        }
+//        return array('isBindWechat' => ($bindInfo && $bindInfo['wechat_unionid']) ? 1 : 0, 'withdrawList' => $withdrawList, 'isBindAlipay' => ($bindInfo && $bindInfo['alipay_account']) ? 1 : 0, 'isLock' => $isLock);
+    }
 }

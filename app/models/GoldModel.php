@@ -74,12 +74,10 @@ class GoldModel extends Model
             return 302;
         }
         // 验证按照顺序领取
-        if (!in_array($data['type'], array('walk', 'walk_stage', 'drink', 'sign', 'sport'))) {
-            $sql = 'SELECT MAX(gold_count) FROM t_gold WHERE user_id = ? AND gold_source = ? AND change_date = ?';
-            $maxCount = $this->db->getOne($sql, $userId, $data['type'], date('Y-m-d'));
-            if ($data['count'] != $maxCount + 1) {
-                return 303;
-            }
+        $sql = 'SELECT MAX(gold_count) FROM t_gold WHERE user_id = ? AND gold_source = ? AND change_date = ?';
+        $maxCount = $this->db->getOne($sql, $userId, $data['type'], date('Y-m-d'));
+        if ($data['count'] != $maxCount + 1) {
+            return 303;
         }
         return TRUE;
     }
