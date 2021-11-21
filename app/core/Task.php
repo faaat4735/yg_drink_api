@@ -21,14 +21,8 @@ class Task extends Controller
      * @return array
      */
     public function getInfo ($type) {
-        $className = '\\Core\\Task\\' . ucfirst($type);
-        if (class_exists($className)) {
-            $this->className = new $className($this->userId);
-        } else {
-            $this->type = $type;
-            $this->className = $this;
-        }
-        return $this->className->_getInfo();
+        $this->type = $type;
+        return $this->_getInfo();
     }
 
     /**
@@ -41,20 +35,13 @@ class Task extends Controller
             return $verifyGold;
         }
         // 领取
-        $className = '\\Core\\Task\\' . str_replace(' ', '', ucwords(str_replace('_', ' ', $data['type'])));
-        if (class_exists($className)) {
-            $this->className = new $className($this->userId);
-            $this->className->type = $data['type'];
-        } else {
-            $this->type = $data['type'];
-            $this->className = $this;
-        }
+        $this->type = $data['type'];
         // 验证金额是否符合规范
         $verifyActivity = $this->className->_verify($data);
         if (TRUE !== $verifyActivity) {
             return $verifyActivity;
         }
-        return $this->className->_receiveAward($data);
+        return $this->_receiveAward($data);
 
     }
 
@@ -140,11 +127,7 @@ class Task extends Controller
     }
 
     protected function _receiveAward ($data) {
-        $this->model->gold->insert(array('user_id' => $this->userId, 'gold_count' => $data['count'], 'gold_amount' => $data['num'], 'gold_source' => $data['type'], 'isDouble' => $data['isDouble'] ?? 0, 'isFive' => $data['isFive'] ?? 0));
-        if (in_array($data['type'], array('drink', 'walk', 'walk_stage', 'newer'))) {
-            return array();
-        }
+        $this->model->gold->insert(array('user_id' => $this->userId, 'gold_count' => $data['count'], 'gold_amount' => $data['num'], 'gold_source' => $data['type'], 'isDouble' => $data['isDouble'] ?? 0));
         return $this->_getInfo();
     }
-
 }

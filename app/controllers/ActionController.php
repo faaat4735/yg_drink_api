@@ -186,4 +186,15 @@ class ActionController extends Controller
         $this->db->exec($sql, array('user_id' => $this->userId, 'withdraw_amount' => $this->inputData['amount'], 'withdraw_gold' => $withdrawalGold, 'withdraw_status' => 'pending', 'withdraw_account' => $payAccount, 'withdraw_name' => $payName, 'withdraw_method' => $payMethod));
         return array();
     }
+
+    /**
+     * 领取奖励
+     */
+    public function awardAction () {
+        if (!isset($this->inputData['count']) || !isset($this->inputData['num']) || !isset($this->inputData['type'])) {
+            return 202;
+        }
+        $taskClass = new \Core\Task($this->userId);
+        return $taskClass->receiveAward($this->inputData);
+    }
 }

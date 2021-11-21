@@ -73,6 +73,11 @@ class GoldModel extends Model
         if ($hasReceive) {
             return 302;
         }
+        return TRUE;
+        // todo 只领取一次的
+//        if () {
+//
+//        }
         // 验证按照顺序领取
         $sql = 'SELECT MAX(gold_count) FROM t_gold WHERE user_id = ? AND gold_source = ? AND change_date = ?';
         $maxCount = $this->db->getOne($sql, $userId, $data['type'], date('Y-m-d'));
