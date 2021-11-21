@@ -7,7 +7,6 @@ use Core\Controller;
 class Task extends Controller
 {
     protected $userId;
-    protected $className;
     protected $type;
 
     public function __construct($userId)
@@ -37,7 +36,7 @@ class Task extends Controller
         // 领取
         $this->type = $data['type'];
         // 验证金额是否符合规范
-        $verifyActivity = $this->className->_verify($data);
+        $verifyActivity = $this->_verify($data);
         if (TRUE !== $verifyActivity) {
             return $verifyActivity;
         }
