@@ -114,6 +114,7 @@ class Task extends Controller
                 $sql = 'SELECT count(gold_id) count, MAX(create_time) maxTime FROM t_gold WHERE user_id = ? AND change_date = ? AND gold_source = ?';
                 $receiveInfo = $this->db->getRow($sql, $this->userId, date('Y-m-d'), $this->type);
                 if ($receiveInfo['count'] >= $taskInfo['activity_max']) {
+                    $return['goldInfo'] = array('count' => 0, 'num' => 0,'type' => "");
                     $return['status'] = 2;
                 } else {
                     $return['goldInfo'] = array('count' => $receiveInfo['count'] + 1, 'num' => $taskInfo['activity_award'],'type' => $this->type);
