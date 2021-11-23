@@ -87,7 +87,7 @@ class ActionController extends Controller
             $sql = 'SELECT award_min FROM t_award_config WHERE config_type = "wechat"';
             $gold = $this->db->getOne($sql);
             $this->model->gold->insert(array('user_id' => $this->userId, 'gold_amount' => $gold, 'gold_source' => 'wechat', 'gold_count' => '1'));
-            $return['award'] = $gold;
+            $return = array('count' => 1, 'num' => $gold, 'type' => 'wechat');
         }
 
         return $return;
