@@ -92,7 +92,7 @@ class Task extends Controller
                 }
                 break;
             case 'wechat':
-                $return['type'] = 'popup';
+                $return['type'] = 'interior';
                 $return['url'] = 'wechat';
                 $return['goldInfo'] = array('count' => 1, 'num' => 200,'type' => "wechat");
                 $return['name'] = '绑定微信号';
