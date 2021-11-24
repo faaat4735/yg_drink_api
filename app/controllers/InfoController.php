@@ -52,7 +52,7 @@ class InfoController extends Controller
      * @return array
      */
     public function withdrawAction () {
-        $sql = 'SELECT wechat_unionid, alipay_account FROM t_user WHERE user_id = ?';
+        $sql = 'SELECT wechat_unionid FROM t_user WHERE user_id = ?';
         $bindInfo = $this->db->getRow($sql, $this->userId);
         return array('isBindWechat' => ($bindInfo && $bindInfo['wechat_unionid']) ? 1 : 0);
 //        $isLock = 0;
