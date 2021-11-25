@@ -44,7 +44,7 @@ class InfoController extends Controller
 
     public function taskAction () {
         $taskClass = new \Core\Task($this->userId);
-        return array('sign' => array('total' => 8, 'tomorrow' => 80, "today" => 1, "isReceive" => 1, 'list' =>  array(array("count" => 1, "num" => 40, "type" => "walk"), array("count" => 2, "num" => 20, "type" => "walk"), array("count" => 3, "num" => 30, "type" => "walk"), array("count" => 4, "num" => 30, "type" => "walk"), array("count" => 5, "num" => 30, "type" => "walk"), array("count" => 6, "num" => 30, "type" => "walk"), array("count" => 7, "num" => 30, "type" => "walk")), 'todayReceive' => 1), 'task' => array($taskClass->getInfo('video'), $taskClass->getInfo('drink'), $taskClass->getInfo('drink_total'), $taskClass->getInfo('drink_target'), $taskClass->getInfo('wechat'), $taskClass->getInfo('sport_ywqz'), $taskClass->getInfo('sport_zyz'), $taskClass->getInfo('sport_pyp'), $taskClass->getInfo('sport_yy'), $taskClass->getInfo('sport_hwyd')));
+        return array('sign' => $this->_sign(), 'task' => array($taskClass->getInfo('video'), $taskClass->getInfo('drink'), $taskClass->getInfo('drink_total'), $taskClass->getInfo('drink_target'), $taskClass->getInfo('wechat'), $taskClass->getInfo('sport_ywqz'), $taskClass->getInfo('sport_zyz'), $taskClass->getInfo('sport_pyp'), $taskClass->getInfo('sport_yy'), $taskClass->getInfo('sport_hwyd')));
     }
 
     /**
@@ -66,5 +66,14 @@ class InfoController extends Controller
 //            }
 //        }
 //        return array('isBindWechat' => ($bindInfo && $bindInfo['wechat_unionid']) ? 1 : 0, 'withdrawList' => $withdrawList, 'isBindAlipay' => ($bindInfo && $bindInfo['alipay_account']) ? 1 : 0, 'isLock' => $isLock);
+    }
+
+    private function _sign() {
+        $sql = 'SELECT COUNT(gold_id) FROM t_gold WHERE user_id = ? AND gold_source = "sign"';
+        $signTotal = $this->db->getRow($sql, $this->userId);
+        $sql = 'SELECT COUNT(gold_id) FROM t_gold WHERE user_id = ? AND gold_source = "sign" AND change_date = ?';
+        $isReceive = $this->db->getRow($sql, $this->userId, date("Y-m-d"));
+        $today = ($signTotal % 7) - ($isReceive ? 0 : 1);
+        return array('total' => $signTotal, 'tomorrow' => $this->signList[$today]['num'], "today" => $today, "isReceive" => $isReceive ? 1 : 0, 'list' =>  $this->signList);
     }
 }

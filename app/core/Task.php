@@ -36,12 +36,15 @@ class Task extends Controller
         // 领取
         $this->type = $data['type'];
         // 验证金额是否符合规范
+        if ('sign' == $this->type) {
+            $this->_receiveAward($data);
+            return array();
+        }
         $verifyActivity = $this->_verify($data);
         if (TRUE !== $verifyActivity) {
             return $verifyActivity;
         }
         return $this->_receiveAward($data);
-
     }
 
     protected function _verify($data) {

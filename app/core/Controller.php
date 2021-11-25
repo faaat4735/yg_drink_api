@@ -10,6 +10,7 @@ class Controller
     protected $limitStart = 0;
     protected $limitCount = 10;
     protected $withdrawList = array(0.5, 50, 80, 100, 150);
+    protected $signList = array(array("count" => 1, "num" => 40, "type" => "sign"), array("count" => 2, "num" => 50, "type" => "sign"), array("count" => 3, "num" => 60, "type" => "sign"), array("count" => 4, "num" => 70, "type" => "sign"), array("count" => 5, "num" => 100, "type" => "sign"), array("count" => 6, "num" => 150, "type" => "sign"), array("count" => 7, "num" => 200, "type" => "sign"));
 
     public function __construct()
     {
