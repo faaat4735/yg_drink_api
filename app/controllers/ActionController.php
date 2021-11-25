@@ -101,23 +101,15 @@ class ActionController extends Controller
         if (!isset($this->inputData['amount']) || !in_array($this->inputData['amount'], $this->withdrawList)) {
             return 202;
         }
-        $sql = 'SELECT wechat_unionid, wechat_openid, user_status, alipay_account, alipay_name FROM t_user WHERE user_id = ?';
+        $sql = 'SELECT wechat_unionid, wechat_openid, user_status FROM t_user WHERE user_id = ?';
         $payInfo = $this->db->getRow($sql, $this->userId);
         if (!$payInfo['user_status']) {
             return 310;
         }
-        if (!isset($this->inputData['method']) && !in_array($this->inputData['method'], array('alipay', 'wechat'))) {
+        if (!isset($this->inputData['method']) && !in_array($this->inputData['method'], array('wechat'))) {
             return 202;
         } else {
             switch ($this->inputData['method']) {
-                case 'alipay':
-                    if (!$payInfo['alipay_account']) {
-                        return 316;
-                    }
-                    $payMethod = 'alipay';
-                    $payAccount = $payInfo['alipay_account'];
-                    $payName = $payInfo['alipay_name'];
-                    break;
                 case 'wechat':
                     if (!$payInfo['wechat_unionid']) {
                         return 311;
