@@ -116,7 +116,6 @@ class ActionController extends Controller
                     }
                     $payMethod = 'wechat';
                     $payAccount = $payInfo['wechat_openid'];
-                    $payName = '';
                     break;
             }
         }
@@ -133,8 +132,8 @@ class ActionController extends Controller
             }
         }
         //todo 高并发多次插入记录问题 加锁解决
-        $sql = 'INSERT INTO t_withdraw SET user_id = :user_id, withdraw_amount = :withdraw_amount, withdraw_gold = :withdraw_gold, withdraw_status = :withdraw_status, withdraw_account = :withdraw_account, withdraw_name = :withdraw_name, withdraw_method = :withdraw_method';
-        $this->db->exec($sql, array('user_id' => $this->userId, 'withdraw_amount' => $this->inputData['amount'], 'withdraw_gold' => $withdrawalGold, 'withdraw_status' => 'pending', 'withdraw_account' => $payAccount, 'withdraw_name' => $payName, 'withdraw_method' => $payMethod));
+        $sql = 'INSERT INTO t_withdraw SET user_id = :user_id, withdraw_amount = :withdraw_amount, withdraw_gold = :withdraw_gold, withdraw_status = :withdraw_status, withdraw_account = :withdraw_account, withdraw_method = :withdraw_method';
+        $this->db->exec($sql, array('user_id' => $this->userId, 'withdraw_amount' => $this->inputData['amount'], 'withdraw_gold' => $withdrawalGold, 'withdraw_status' => 'pending', 'withdraw_account' => $payAccount, 'withdraw_method' => $payMethod));
         return array();
     }
 
