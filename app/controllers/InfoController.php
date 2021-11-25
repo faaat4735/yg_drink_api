@@ -69,10 +69,10 @@ class InfoController extends Controller
     }
 
     private function _sign() {
-        $sql = 'SELECT COUNT(gold_id) FROM t_gold WHERE user_id = ? AND gold_source = "sign"';
-        $signTotal = $this->db->getRow($sql, $this->userId);
+        $sql = 'SELECT IFNULL(COUNT(gold_id), 0) FROM t_gold WHERE user_id = ? AND gold_source = "sign"';
+        $signTotal = $this->db->getOne($sql, $this->userId);
         $sql = 'SELECT COUNT(gold_id) FROM t_gold WHERE user_id = ? AND gold_source = "sign" AND change_date = ?';
-        $isReceive = $this->db->getRow($sql, $this->userId, date("Y-m-d"));
+        $isReceive = $this->db->getOne($sql, $this->userId, date("Y-m-d"));
         $today = ($signTotal % 7) - ($isReceive ? 0 : 1);
         return array('total' => $signTotal, 'tomorrow' => $this->signList[$today]['num'], "today" => $today, "isReceive" => $isReceive ? 1 : 0, 'list' =>  $this->signList);
     }
