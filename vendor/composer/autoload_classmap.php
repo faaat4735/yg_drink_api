@@ -23,6 +23,7 @@ return array(
     'Core\\Controller' => $baseDir . '/app/core/Controller.php',
     'Core\\DB\\Pdo' => $baseDir . '/app/core/DB/Pdo.php',
     'Core\\Db' => $baseDir . '/app/core/Db.php',
+    'Core\\DrinkList' => $baseDir . '/app/core/DrinkList.php',
     'Core\\Mail' => $baseDir . '/app/core/Mail.php',
     'Core\\Model' => $baseDir . '/app/core/Model.php',
     'Core\\Oss' => $baseDir . '/app/core/Oss.php',

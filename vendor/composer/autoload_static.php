@@ -38,6 +38,7 @@ class ComposerStaticInit3be092224bfef481c30fd0fd42b1fd36
         'Core\\Controller' => __DIR__ . '/../..' . '/app/core/Controller.php',
         'Core\\DB\\Pdo' => __DIR__ . '/../..' . '/app/core/DB/Pdo.php',
         'Core\\Db' => __DIR__ . '/../..' . '/app/core/Db.php',
+        'Core\\DrinkList' => __DIR__ . '/../..' . '/app/core/DrinkList.php',
         'Core\\Mail' => __DIR__ . '/../..' . '/app/core/Mail.php',
         'Core\\Model' => __DIR__ . '/../..' . '/app/core/Model.php',
         'Core\\Oss' => __DIR__ . '/../..' . '/app/core/Oss.php',
