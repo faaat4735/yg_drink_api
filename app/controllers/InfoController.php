@@ -3,6 +3,7 @@
 namespace Controller;
 
 use Core\Controller;
+use Core\DrinkList;
 
 class InfoController extends Controller
 {
@@ -15,7 +16,10 @@ class InfoController extends Controller
         $target = $this->db->getOne($sql, $this->userId);
         $sql = 'SELECT drink_quantity quantity, UNIX_TIMESTAMP(create_time) * 1000 time, drink_type_name drinkType FROM t_user_drink LEFT JOIN t_drink_type USING(drink_type) WHERE user_id = ? AND create_date = ? ORDER BY drink_id DESC';
         $list = $this->db->getAll($sql, $this->userId, date("Y-m-d"));
-        return array('current' => array_sum(array_column($list, 'quantity')), 'target' => $target, 'list' => $list, 'gold' => array(array("count" => 1, "num" => 40, "type" => "walk"), array("count" => 3, "num" => 20, "type" => "walk"), array("count" => 4, "num" => 30, "type" => "walk")));
+        $drinkClass = new DrinkList($this->userId);
+        $drinkInfo = $drinkClass->getReceiveTime();
+        return array('current' => array_sum(array_column($list, 'quantity')), 'target' => $target, 'list' => $list, 'gold' => $drinkInfo['list'], 'receiveTime' => $drinkInfo['receiveTime'], 'serverTime' => $drinkInfo['serverTime']);
+//        return array('current' => array_sum(array_column($list, 'quantity')), 'target' => $target, 'list' => $list, 'gold' => array(array("count" => 1, "num" => 40, "type" => "walk"), array("count" => 3, "num" => 20, "type" => "walk"), array("count" => 4, "num" => 30, "type" => "walk")));
 //        return array('current' => 1200, 'target' => 2400, 'list' => array(array('time' => time() * 1000, 'drinkType' => '水', 'quantity' => 200), array('time' => time() * 1000, 'drinkType' => '水', 'quantity' => 200), array('time' => time() * 1000, 'drinkType' => '水', 'quantity' => 200), array('time' => time() * 1000, 'drinkType' => '水', 'quantity' => 200)));
     }
 

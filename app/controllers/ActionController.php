@@ -147,4 +147,14 @@ class ActionController extends Controller
         $taskClass = new \Core\Task($this->userId);
         return $taskClass->receiveAward($this->inputData);
     }
+
+    /**
+     * 领取喝水奖励
+     */
+    public function awardDrinkAction () {
+        $sql = "SELECT COUNT(gold_id) FROM t_gold WHERE user_id = ? AND change_date = ?";
+        $alreadyReveive = $this->db->getOne($sql, $this->userId, date("Y-m-d"));
+        $taskClass = new \Core\Task($this->userId);
+        return $taskClass->receiveAward(array('count' => $alreadyReveive + 1, 'num' => $this->inputData['num'], 'type' => 'drink'));
+    }
 }
