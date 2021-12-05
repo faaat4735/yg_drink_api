@@ -7,14 +7,14 @@ use Core\Controller;
 
 class DrinkList extends Controller
 {
-    private $userId;
+    protected $userId;
     private $awardLimitTime = 5;
     private $awardLimitCount = 5;
     private $awardRange = array('award_min' => 10, 'award_max' => 50);
 
     public function __construct($userId)
     {
-        $this->userId =  $userId;
+        $this->userId = $userId;
     }
 
     /**
